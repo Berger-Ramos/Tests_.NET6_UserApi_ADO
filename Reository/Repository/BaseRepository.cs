@@ -1,11 +1,6 @@
 ﻿using Library.Utils;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Repository
 {
@@ -27,23 +22,14 @@ namespace Library.Repository
             {
                 SqlCommand cmd = null;
 
-                if (transactionDB != null)
-                {
-                    transactionDB.SetConnectionAndTransaction(con);
-                    cmd = new SqlCommand(procedureName, con, transactionDB.GetTransaction());
-                }
-                else
-                {
+                transactionDB.SetConnectionAndTransaction(con);
+                cmd = new SqlCommand(procedureName, con, transactionDB == null ? null : transactionDB.GetTransaction());
+
+                if (transactionDB == null)
                     con.Open();
-                    new SqlCommand(procedureName, con, null);
-                }
+
                 cmd.CommandType = CommandType.StoredProcedure;
-
-                foreach (SqlParameter parameter in parameters)
-                {
-                    cmd.Parameters.Add(parameter);
-                }
-
+                cmd.Parameters.AddRange(parameters.ToArray());
                 cmd.ExecuteNonQuery();
 
                 if (transactionDB == null)
@@ -52,13 +38,10 @@ namespace Library.Repository
             catch (Exception ex)
             {
                 if (transactionDB != null)
-                {
                     transactionDB.Commit();
-                }
                 else
-                {
                     con.Close();
-                }
+
                 throw ex;
             }
         }

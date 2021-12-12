@@ -1,7 +1,6 @@
 ﻿using Library.Entity;
-using Repository.Repository;
 using UserApi.Utils;
-using Library.Repository;
+using Library.RepositoryInterface;
 
 namespace UserApi.Domain
 {

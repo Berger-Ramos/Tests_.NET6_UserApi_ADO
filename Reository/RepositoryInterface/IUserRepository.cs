@@ -1,5 +1,4 @@
 ﻿using Library.Entity;
-using Repository.Repository;
 
 namespace Library.RepositoryInterface
 {

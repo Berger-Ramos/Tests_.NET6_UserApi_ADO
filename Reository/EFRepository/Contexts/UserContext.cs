@@ -13,17 +13,5 @@ namespace Library.EFRepository.Contexts
             if(!optionsBuilder.IsConfigured)
                 optionsBuilder.UseSqlServer(ConfigurationManager.GetConnection());
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<User>(entity =>
-        //    {
-        //        entity.HasKey(e => e.Id)
-        //            .HasName("UserID");
-
-        //        entity.HasKey(e => e.Name);
-
-        //    });
-        //}
     }
 }

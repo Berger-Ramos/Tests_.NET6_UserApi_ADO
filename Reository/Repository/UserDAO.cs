@@ -11,6 +11,7 @@ namespace Library.Repository
     public class UserDAO : BaseRepository, IUserRepository
     {
         public TransactionDB TransactionDB { get; set; }
+
         public UserDAO(TransactionDB transactionDB)
         {
             TransactionDB = transactionDB;

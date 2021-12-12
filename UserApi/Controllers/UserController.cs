@@ -1,9 +1,6 @@
 ﻿using Library.Entity;
-using Library.Repository;
 using Library.RepositoryInterface;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Repository;
-using UserApi.Domain;
 using UserApi.Domain;
 
 namespace UserApi.Controllers
@@ -17,7 +14,7 @@ namespace UserApi.Controllers
         /// <response code="201">Returns the newly created item</response>
         /// <response code="400">If the item is null</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult SaveUser([FromBody] User user)
         {
@@ -28,7 +25,7 @@ namespace UserApi.Controllers
                 userControl.UserIsValid();
                 userControl.SaveUser();
 
-                return Created("",new { Success = true, Response = user });
+                return Ok(new { Success = true, Response = user });
             }
             catch (Exception ex)
             {
@@ -42,7 +39,6 @@ namespace UserApi.Controllers
             IUserRepository repository = new Library.EFRepository.UserDAO();
 
             User user = repository.GetUserByName(JsonUser.Name);
-
             repository.Dispose();
 
             return Ok(new { Success = true, Response = user });
