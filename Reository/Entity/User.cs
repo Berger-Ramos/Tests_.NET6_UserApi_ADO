@@ -9,7 +9,7 @@ namespace Library.Entity
         [Column("UserId")]
         public override long Id { get => base.Id; set => base.Id = value; }
 
-        [Required(ErrorMessage = "Cam")]
+        [Required(ErrorMessage = "Campo Name obrigatório")]
         public string Name { get; set; }
     }
 }
