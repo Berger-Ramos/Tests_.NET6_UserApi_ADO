@@ -19,7 +19,7 @@ namespace Library.Repository
             }
         }
 
-        public static void ExecutyProcedure(List<SqlParameter> parameters, string procedureName, TransactionDB transactionDB)
+        public static void ExecuteProcedure(List<SqlParameter> parameters, string procedureName, TransactionDB transactionDB)
         {
             SqlConnection con = new SqlConnection(ConnectionString);
 

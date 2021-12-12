@@ -30,7 +30,7 @@ namespace Library.Repository
                 List<SqlParameter> sqlParameters = new List<SqlParameter>();
                 sqlParameters.Add(new SqlParameter("@parameterName", user.Name));
 
-                ExecutyProcedure(sqlParameters, "SaveUser", TransactionDB);
+                ExecuteProcedure(sqlParameters, "SaveUser", TransactionDB);
 
                 return true;
             }
