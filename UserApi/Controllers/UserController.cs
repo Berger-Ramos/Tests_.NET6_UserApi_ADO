@@ -10,8 +10,6 @@ namespace UserApi.Controllers
     public class UserController : ControllerBase
     {
         //some
-        //some 2
-        /som3
         [HttpPost]
         /// </remarks>
         /// <response code="201">Returns the newly created item</response>
