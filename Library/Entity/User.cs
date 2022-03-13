@@ -5,6 +5,7 @@ namespace Library.Entity
 {
     public class User : BaseEntity
     {
+        
         [Key]
         [Column("UserId")]
         public override long Id { get => base.Id; set => base.Id = value; }

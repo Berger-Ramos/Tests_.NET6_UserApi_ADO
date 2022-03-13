@@ -1,5 +1,6 @@
 ﻿using Library.Entity;
 using Library.RepositoryInterface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserApi.Domain;
 
@@ -9,11 +10,6 @@ namespace UserApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        //some
-        [HttpPost]
-        /// </remarks>
-        /// <response code="201">Returns the newly created item</response>
-        /// <response code="400">If the item is null</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,7 +29,8 @@ namespace UserApi.Controllers
                 return BadRequest(new { Success = false, Response = ex.Message });
             }
         }
-        [HttpGet]
+        
+        [HttpPost]
         public IActionResult GetUserByName([FromBody] User JsonUser)
         {
 
@@ -45,6 +42,7 @@ namespace UserApi.Controllers
             return Ok(new { Success = true, Response = user });
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetUsers()
         {
