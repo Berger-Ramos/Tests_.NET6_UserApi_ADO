@@ -2,8 +2,10 @@
 
 namespace Library.RepositoryInterface
 {
-    public interface IUserRepository : IRepository<User>, IDisposable
+    public interface IUserRepository : IEFRepository<User>, IDisposable
     {
         User GetUserByName(string userName);
+
+        User GetUser(string userName, string password);
     }
 }

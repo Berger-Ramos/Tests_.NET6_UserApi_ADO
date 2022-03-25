@@ -120,4 +120,10 @@
   <data name="EXC0001" xml:space="preserve">
     <value>Usuario inválido</value>
   </data>
+  <data name="EXC0002" xml:space="preserve">
+    <value>name is required</value>
+  </data>
+  <data name="EXC0003" xml:space="preserve">
+    <value>Password is required</value>
+  </data>
 </root>

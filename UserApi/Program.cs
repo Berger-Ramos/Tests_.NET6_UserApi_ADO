@@ -4,6 +4,10 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using UserApi.Domain.DomainInterface;
+using UserApi.Domain;
+using Library.Entity.EntittyInterface;
+using Library.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +53,7 @@ builder.Services.AddSwaggerGen(
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
+
 #region TokenValidation
 builder.Services.AddAuthentication(opt =>
 {
@@ -59,9 +64,9 @@ builder.Services.AddAuthentication(opt =>
       {
           options.TokenValidationParameters = new TokenValidationParameters
           {
-              ValidateIssuer = true,
-              ValidateAudience = true,
-              ValidateLifetime = true,
+              ValidateIssuer = false,
+              ValidateAudience = false,
+              ValidateLifetime = false,
               ValidateIssuerSigningKey = true,
               ValidIssuer = "UserApi.net",
               ValidAudience = "UserApi.net",

@@ -3,6 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using UserApi.Domain;
+using UserApi.Domain.DomainInterface;
+using UserApi.Utils.Inputs;
 
 namespace UserApi.Controllers
 {
@@ -11,19 +14,24 @@ namespace UserApi.Controllers
     public class TokenController : ControllerBase
     {
         public IConfiguration _configuration { get; set; }
+
         public TokenController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-
+        [SwaggerOperation]
         [HttpPost]
-        public IActionResult RequestToken()
+        public IActionResult RequestToken(UserJsonInput userJsonInput)
         {
             try
             {
+                IUserControl userControl = new UserControl(null);
+
+                userControl.UserIsValid(userJsonInput);
+
                 var claims = new[]
                 {
-                new Claim(ClaimTypes.Name, "Berger")
+                new Claim(ClaimTypes.Name, userJsonInput.Name)
                 };
 
                 SymmetricSecurityKey key = new SymmetricSecurityKey(

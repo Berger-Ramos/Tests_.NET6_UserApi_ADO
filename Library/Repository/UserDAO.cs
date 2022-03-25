@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace Library.Repository
 {
-    public class UserDAO : BaseRepository, IUserRepository
+    public class UserDAO : BaseRepository
     {
         public TransactionDB TransactionDB { get; set; }
 
@@ -97,6 +97,21 @@ namespace Library.Repository
         }
 
         public bool Update(User entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Commit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void rollback()
+        {
+            throw new NotImplementedException();
+        }
+
+        public M GetTransaction<M>()
         {
             throw new NotImplementedException();
         }

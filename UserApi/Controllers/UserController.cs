@@ -3,6 +3,7 @@ using Library.RepositoryInterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserApi.Domain;
+using UserApi.Utils.Inputs;
 
 namespace UserApi.Controllers
 {
@@ -13,13 +14,20 @@ namespace UserApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SaveUser([FromBody] User user)
+        [Authorize]
+        public IActionResult SaveUser([FromBody] UserJsonInput userJsonInput)
         {
             try
             {
+                User user = new User
+                {
+                    Name = userJsonInput.Name,
+                    Password = userJsonInput.Password,
+                    IsAdmin = userJsonInput.IsAdmin
+                };
+
                 UserControl userControl = new UserControl(user);
 
-                userControl.UserIsValid();
                 userControl.SaveUser();
 
                 return Ok(new { Success = true, Response = user });
@@ -31,12 +39,12 @@ namespace UserApi.Controllers
         }
         
         [HttpPost]
-        public IActionResult GetUserByName([FromBody] User JsonUser)
+        public IActionResult GetUserByName([FromQuery] string Name)
         {
 
             IUserRepository repository = new Library.EFRepository.UserDAO();
 
-            User user = repository.GetUserByName(JsonUser.Name);
+            User user = repository.GetUserByName(Name);
             repository.Dispose();
 
             return Ok(new { Success = true, Response = user });

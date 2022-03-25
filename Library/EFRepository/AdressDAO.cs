@@ -7,29 +7,26 @@ using System.Data.Common;
 
 namespace Library.EFRepository
 {
-    public class UserDAO : IUserRepository
+    public class AdressDAO : IEFRepository<Adress>
     {
-        public UserDAO(IDbContextTransaction? transaction = null )
+        public AdressDAO(IDbContextTransaction? transaction = null, DbConnection dbConnection = null)
         {
-            Context = new UserContext();
+            Context = new AdressContext(dbConnection);
             Transaction = transaction;
-            Connection = Context.Database.GetDbConnection();
         }
 
-        private UserContext Context { get; set; }
-
-        public DbConnection Connection { get; set; }
+        private AdressContext Context { get; set; }
 
         public IDbContextTransaction? Transaction { get; set; }
 
 
-        public bool Save(User entity)
+        public bool Save(Adress adress)
         {
             try
             {
                 IniciateTransactionIfNotExists();
-                Context.Add(entity);
-                Context.SaveChanges(false);
+                Context.Add(adress);
+                Context.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -37,17 +34,7 @@ namespace Library.EFRepository
                 return false;
             }
         }
-
-        public User GetUserByName(string userName)
-        {
-            return Context.User.Where(x => x.Name == userName).FirstOrDefault();
-        }
-
-        public List<User> GetUsers()
-        {
-            return Context.User.OrderByDescending(u => u.Name).Take(100).ToList();
-        }
-        public bool Delete(User entity)
+        public bool Delete(Adress entity)
         {
             try
             {
@@ -61,11 +48,12 @@ namespace Library.EFRepository
             }
         }
 
-        public bool Update(User entity)
+        public bool Update(Adress entity)
         {
             try
             {
-                Context.User.Update(entity);
+                Context.Update(entity);
+
                 return true;
             }
             catch (Exception)
@@ -107,11 +95,13 @@ namespace Library.EFRepository
         {
             if (Transaction == null)
                 Transaction = Context.Database.BeginTransaction();
+            else
+                Context.Database.UseTransaction(Transaction.GetDbTransaction());
         }
 
-        public DbConnection GetConnection()
+        public IDbContextTransaction? GetTransaction<IDbContextTransaction>()
         {
-            return Context.Database.GetDbConnection();
+            return (IDbContextTransaction?)Transaction;
         }
 
         public IDbContextTransaction GetTransaction()
@@ -119,9 +109,9 @@ namespace Library.EFRepository
             return Transaction;
         }
 
-        public User GetUser(string userName, string password)
+        public DbConnection GetConnection()
         {
-            return Context.User.Where(user => user.Name == userName && user.Password == password).FirstOrDefault();
+            return Context.Database.GetDbConnection();
         }
     }
 }
