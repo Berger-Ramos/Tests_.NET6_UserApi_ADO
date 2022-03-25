@@ -35,14 +35,14 @@ namespace Library.Repository
                 if (transactionDB == null)
                     con.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (transactionDB != null)
                     transactionDB.Commit();
                 else
                     con.Close();
 
-                throw ex;
+                throw;
             }
         }
     }

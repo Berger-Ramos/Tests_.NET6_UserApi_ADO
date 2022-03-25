@@ -19,7 +19,7 @@ namespace UserApi.Controllers
         {
             _configuration = configuration;
         }
-        [SwaggerOperation]
+        
         [HttpPost]
         public IActionResult RequestToken(UserJsonInput userJsonInput)
         {
