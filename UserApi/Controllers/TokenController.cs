@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using UserApi.Domain;
 using UserApi.Domain.DomainInterface;
+using UserApi.Service.ServiceInterface;
 using UserApi.Utils.Inputs;
 
 namespace UserApi.Controllers
@@ -13,11 +14,14 @@ namespace UserApi.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        public IConfiguration _configuration { get; set; }
+        private IConfiguration _configuration { get; set; }
 
-        public TokenController(IConfiguration configuration)
+        private ITokenService _tokenservice { get; set; }
+
+        public TokenController(IConfiguration configuration, ITokenService tokenService)
         {
             _configuration = configuration;
+            _tokenservice = tokenService;
         }
         
         [HttpPost]
@@ -29,27 +33,35 @@ namespace UserApi.Controllers
 
                 userControl.UserIsValid(userJsonInput);
 
-                var claims = new[]
-                {
-                new Claim(ClaimTypes.Name, userJsonInput.Name)
-                };
 
-                SymmetricSecurityKey key = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
-                        );
+                Dictionary<string,string> tokenClaim = new Dictionary<string,string>();
+                tokenClaim.Add("Name", userJsonInput.Name);
 
-                SigningCredentials creds = new SigningCredentials(key: key, SecurityAlgorithms.HmacSha256);
+                _tokenservice.AddClaims(tokenClaim);
 
-                var token = new JwtSecurityToken
-                (
-                   issuer: "UserApi.net",
-                   audience: "UserApi.net",
-                   claims: claims,
-                   expires: DateTime.Now.AddHours(1),
-                   signingCredentials: creds
-                );
+                string tokenResponse = _tokenservice.GanerateToken();
 
-                string tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
+                //var claims = new[]
+                //{
+                //new Claim(ClaimTypes.Name, userJsonInput.Name)
+                //};
+
+                //SymmetricSecurityKey key = new SymmetricSecurityKey(
+                //        Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
+                //        );
+
+                //SigningCredentials creds = new SigningCredentials(key: key, SecurityAlgorithms.HmacSha256);
+
+                //var token = new JwtSecurityToken
+                //(
+                //   issuer: "UserApi.net",
+                //   audience: "UserApi.net",
+                //   claims: claims,
+                //   expires: DateTime.Now.AddHours(1),
+                //   signingCredentials: creds
+                //);
+
+                //string tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
                 return Ok(tokenResponse);
             }

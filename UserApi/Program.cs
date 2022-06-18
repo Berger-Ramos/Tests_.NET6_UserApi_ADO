@@ -8,6 +8,8 @@ using UserApi.Domain.DomainInterface;
 using UserApi.Domain;
 using Library.Entity.EntittyInterface;
 using Library.Entity;
+using UserApi.Service.ServiceInterface;
+using UserApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +54,9 @@ builder.Services.AddSwaggerGen(
     );
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+//builder.Services.AddScoped<ITokenService, JWTService>();
+builder.Services.AddScoped<ITokenService>( service => new JWTService(builder.Configuration["Jwt:Key"]));
+
 
 
 #region TokenValidation
