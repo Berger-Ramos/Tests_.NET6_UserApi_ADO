@@ -3,6 +3,7 @@ using Library.RepositoryInterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserApi.Domain;
+using UserApi.Domain.MailService;
 using UserApi.Utils.Inputs;
 
 namespace UserApi.Controllers
@@ -14,7 +15,7 @@ namespace UserApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
+        //[Authorize]
         public IActionResult SaveUser([FromBody] UserJsonInput userJsonInput)
         {
             try
@@ -29,6 +30,8 @@ namespace UserApi.Controllers
                 UserControl userControl = new UserControl(user);
 
                 userControl.SaveUser();
+
+                new MailService().GenerateMailQueue(string.Format("Hello {0}, your password is {1}", user.Name, user.Password));
 
                 return Ok(new { Success = true, Response = user });
             }
