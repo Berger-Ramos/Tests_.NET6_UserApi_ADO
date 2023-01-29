@@ -1,0 +1,34 @@
+version: "3.1"
+services:
+  rabbitmq-container:
+    image: rabbitmq:3-management
+    hostname: rabbitserver
+    ports:
+      - 5673:5673
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - MyNetwork
+
+  resolute-container:
+    image: emailservice:dev
+    ports:
+      - 8080:8080
+    environment:
+      - spring_rabbitmq_host=rabbitserver
+      - spring_rabbitmq_port=5672
+      - spring_rabbitmq_username=guest
+      - spring_rabbitmq_password=guest
+      - resolute_rabbitmq_publishQueueName=resolute-run-request
+      - resolute_rabbitmq_exchange=resolute
+    depends_on:
+      - rabbitmq-container
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - MyNetwork
+
+networks:
+  resolute:
+    external:
+      name: MyNetwork

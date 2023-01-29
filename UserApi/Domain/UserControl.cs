@@ -3,7 +3,6 @@ using UserApi.Utils;
 using Library.RepositoryInterface;
 using UserApi.Utils.Inputs;
 using UserApi.Domain.DomainInterface;
-using Library.Entity.EntittyInterface;
 
 namespace UserApi.Domain
 {
