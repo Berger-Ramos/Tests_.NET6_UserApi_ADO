@@ -3,6 +3,7 @@ using Library.RepositoryInterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserApi.Domain;
+using UserApi.Domain.MailService;
 using UserApi.Utils.Inputs;
 
 namespace UserApi.Controllers
@@ -29,6 +30,14 @@ namespace UserApi.Controllers
                 UserControl userControl = new UserControl(user);
 
                 userControl.SaveUser();
+
+                if (userJsonInput.Email != null)
+                {
+                    MailService mailservice = new MailService();
+
+                    mailservice.FormatMailToSend(userJsonInput.Email, userJsonInput.Name);
+                    mailservice.GenerateMailQueue();
+                }
 
                 return Ok(new { Success = true, Response = user });
             }
