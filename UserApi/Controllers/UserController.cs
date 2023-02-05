@@ -15,7 +15,7 @@ namespace UserApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [Authorize]
         public IActionResult SaveUser([FromBody] UserJsonInput userJsonInput)
         {
             try
@@ -31,7 +31,13 @@ namespace UserApi.Controllers
 
                 userControl.SaveUser();
 
-                new MailService().GenerateMailQueue(string.Format("Hello {0}, your password is {1}", user.Name, user.Password));
+                if (userJsonInput.Email != null)
+                {
+                    MailService mailservice = new MailService();
+
+                    mailservice.FormatMailToSend(userJsonInput.Email, userJsonInput.Name);
+                    mailservice.GenerateMailQueue();
+                }
 
                 return Ok(new { Success = true, Response = user });
             }

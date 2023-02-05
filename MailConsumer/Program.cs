@@ -2,9 +2,5 @@
 using Library.MessageFrameWork.RabbitMQ;
 using MailConsumer.Domain;
 
-IConsumer consumerMessage= new Consumer(hosname: "localhost", queue: "MailQueue");
-
-consumerMessage.GetMessage();
-
 
 Thread.Sleep(1000);

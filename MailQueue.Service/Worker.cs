@@ -1,6 +1,4 @@
-using Library.MessageFrameWork.RabbitMQ;
 using MailConsumer.Domain;
-using Microsoft.Extensions.Logging;
 
 namespace MailQueue.Service
 {
@@ -8,9 +6,12 @@ namespace MailQueue.Service
     {
         private readonly ILogger<Worker> _logger;
 
-        public Worker(ILogger<Worker> logger)
+        public readonly IConsumer consumerMessage;
+
+        public Worker(ILogger<Worker> logger, IConsumer consumer)
         {
             _logger = logger;
+            consumerMessage = consumer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,10 +25,7 @@ namespace MailQueue.Service
 
                 try
                 {
-                    IConsumer consumerMessage = new Consumer(hosname: "localhost", queue: "MailQueue", logger : _logger);
-
                     consumerMessage.GetMessage();
-
                 }
                 catch (Exception ex)
                 {
